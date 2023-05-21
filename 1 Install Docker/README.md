@@ -1,6 +1,6 @@
-# Установка Docker - Ubuntu
+# 1 Установка Docker - Ubuntu
 
-## 1) Добавляем репозиторий докера (чтобы получить последнюю его версию)
+## 1.1 Добавляем репозиторий докера (чтобы получить последнюю его версию)
 ```
 sudo apt-get update
 ```
@@ -28,7 +28,7 @@ echo \
 ```
 
 
-## 2) Устанавливаем docker
+## 1.2 Устанавливаем docker
 ```
 sudo apt-get update
 ```
@@ -38,7 +38,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 ```
 
 
-## 3) Устанавливаем docker-compose
+## 1.3 Устанавливаем docker-compose
 
 ```
 sudo curl -L "https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -48,7 +48,7 @@ sudo curl -L "https://github.com/docker/compose/releases/download/v2.6.0/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 
-## 4) Проверяем, что всё установилось
+## 1.4 Проверяем, что всё установилось
 ```
 sudo docker -v
 ```
@@ -65,7 +65,7 @@ sudo docker images
 docker-compose -v
 ```
 
-## 5) Запуск докера не из-под суперпользователя
+## 1.5 Запуск докера не из-под суперпользователя
 
 ```
 sudo groupadd docker
@@ -88,3 +88,55 @@ docker ps
 ```
 docker images
 ```
+
+# 2 Установка Docker - Windows
+Установим docker и docker-compose на Windows 10 через WSL2 и Docker Desktop.
+## 2.1 Установка WSL
+Запустить cmd от имени администратора. Установим платформу виртауальной машины и Ubuntu. После чего перезагрузим ПК.
+```
+wsl --install
+```
+После перезагрузки продолжится установка Ubuntu. Если нет, то открыть командную строку в режиме администратора. И ввести:
+
+## 2.2 Установка Ubuntu
+```
+wsl --install -d Ubuntu
+```
+и создать пользователя. Теперь увидим Ubuntu:
+```
+wsl -l -v
+```
+
+Чтобы перейти из cmd в Ubuntu, нужно ввести ```wsl```.
+
+## 2.3 Установка Docker Desktop
+Перейдите на сайт докера, где предлагают установить его на винду ([Ссылка](https://docs.docker.com/desktop/install/windows-install/)). 
+
+Ознакомьтесь с ним и скачайте установщик Docker Desktop for Windows (файл .exe).
+
+Когда он скачается, нажмите на этот установщик. Обратите внимание, что у вас должна стоять галочка на Use WSL 2 instead of Hyper-V. 
+
+После установки введем команду 
+
+```
+wsl -l -v
+```
+
+И увидим docker.
+
+Таким образом, теперь мы можем работать с докером через CLI!
+
+Попробуйте в CMD ввести ```wsl``` (вы должны провалиться в убунту), после чего выполнить команды ```docker -v``` и ```docker-compose -v```.
+
+## 2.4. Полезная фишка
+
+В курсе нам нужно будет прокидывать файлы в докер-контейнеры, а также использовать файлы для докер компоуза.
+
+Чтобы попасть в нужную папку, можно в вашей убунте выполнить команду ```explorer.exe .``` ([ссылка](https://superuser.com/questions/1110974/how-to-access-linux-ubuntu-files-from-windows-10-wsl)).
+
+
+
+
+
+
+
