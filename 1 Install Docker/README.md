@@ -134,7 +134,18 @@ wsl -l -v
 
 Чтобы попасть в нужную папку, можно в вашей убунте выполнить команду ```explorer.exe .``` ([ссылка](https://superuser.com/questions/1110974/how-to-access-linux-ubuntu-files-from-windows-10-wsl)).
 
+Например, перейдем в Ubuntu ```wsl``` и создадим каталог DOCKERTEST, а затем откроем его в windows:
+```
+wsl
+```
 
+```
+mkdir DOCKERTEST
+```
+
+```
+explorer.exe .
+```
 
 
 
