@@ -43,6 +43,7 @@ sudo curl -L "https://github.com/docker/compose/releases/download/v2.6.0/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 
+## 4) Проверяем, что всё установилось
 ```
 sudo docker -v
 ```
@@ -59,6 +60,26 @@ sudo docker images
 docker-compose -v
 ```
 
-## 4) Проверяем, что всё установилось
-
 ## 5) Запуск докера не из-под суперпользователя
+
+```
+sudo groupadd docker
+```
+
+```
+sudo usermod -aG docker $USER
+```
+
+Проверим, что все работает.
+
+```
+id -nG
+```
+
+```
+docker ps
+```
+
+```
+docker images
+```
