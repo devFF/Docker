@@ -14,8 +14,11 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 ENV ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#dedede,bg=#9c9c9c,bold,underline"
 
 # Запустим оболочку
-#CMD [ "zsh" ]
 ENTRYPOINT [ "zsh" ]
+
+# Добавим скрипт приветсвтвия и запустим его
+RUN touch hello.sh && echo "echo 'Hello from container'" > hello.sh
+CMD [ "hello.sh" ]
 
 
 
