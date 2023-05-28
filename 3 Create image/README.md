@@ -53,7 +53,7 @@ WORKDIR /home/igor
 А затем указываем папку, в которой находится Dockerfile. Можно поставить точку ``` .```, что соотвествует текущей папке.
 Также можно добавить опцию ```-f``` и указать точное название Dockerfile (если его название отличается от Dockerfile)
 ```
-docker build -t custom_ubuntu:1
+docker build -t custom_ubuntu:1 .
 ```
 5. А теперь посмотрим список образов и увидим наш образ
 ```
@@ -69,7 +69,7 @@ COPY random_file.txt random_file.sh
 
 7. Соберем образ с тэгом 2
 ```
-docker build -t custom_ubuntu:2
+docker build -t custom_ubuntu:2 .
 ```
 
 8. Установим nano, wget и curl при помощи инструкции RUN
@@ -80,6 +80,59 @@ RUN apt-get update && apt-get install -y nano wget curl git
 
 ВАЖНО! Вверх нужно поднимать те инструкции, которые точно не будут изменены.
 
+## .dockerignore
+Создадим в папке с dockerfile папку huge_dir и положим в нее тяжелый файл, который не будет использоваться в dockerfile. Но несмотря на то, что он явно не указан в dockerfile при сборке образа демон все равно подгрузит его (потратив ресурсы и время просто так). Чтобы избежать этого, создадим в папке файл .dockerignore и впишем в него название папки. Попробуем собрать образ снова и увидим, что теперь демон игнорирует эту папку при сборке образа. 
+
+9. Изменим интерфейс нашего терминала в контейнере, добавив в dockerfile следующее:
+```
+# Изменим интерфейс терминала в контейнере
+RUN sh -c "$(wget -0- hhtps://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)" -- \
+    -t robbyrussel \
+    -p https://github.com/zsh-users/zsh-autosuggestions
+
+ENV ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#dedede,bg=#9c9c9c,bold,underline"
+```
+
+Теперь соберем образ и запустим контейнер. Увидим, что интерфейс не изменился, введем для этого ```zsh``` внутри контейнера, чтобы изменить его. 
+
+```
+docker build -t custom_ubuntu:4 . 
+docker run -it --rm custom_ubuntu:4
+```
+
+Как сделать, чтобы не приходилось постоянно писать ```zsh```? Нужно использовать ```CMD``` или ```ENTRYPOINT``` в dockerfile. Эти инструкции имеют следующий синтаксис:
+
+```
+ENTRYPOINT zsh
+#или 
+ENTRYPOINT ["zsh"]
+
+# Аналогично CMD
+CMD zsh
+#или 
+CMD ["zsh"]
+```
+Создадим два разных образа ```CMD``` и ```ENTRYPOINT```: 
+```
+docker build  custom_ubuntu/cmd . 
+docker build  custom_ubuntu/entry .
+```
+В чем разница между ```CMD``` и ```ENTRYPOINT```? Представим, что у нас в образе будет лежать некоторый скрипт script.sh. И у нас есть задача, запустить контейнер с оболочкой zsh и выполнить этот скрипт. Тогда синтаксис запуска будет следующий:
+
+Для ENTRYPOINT:
+```
+docker run -it --rm custom_ubuntu/entry script.sh
+```
+
+ДЛЯ CMD:
+Этот запуск упадет с ошибкой, так как script.sh перезапишет CMD.
+```
+docker run -it --rm custom_ubuntu/cmd script.sh
+```
+Правильно запустить CMD будет так (указав zsh в аргументах cmd):
+```
+docker run -it --rm custom_ubuntu/cmd zsh script.sh
+```
 
 
 
