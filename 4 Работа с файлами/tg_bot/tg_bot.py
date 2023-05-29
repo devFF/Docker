@@ -9,8 +9,10 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
+with open ('TOKEN.txt', 'r') as file:
+    APP_TOKEN_FROM_FILE = file.read()
 # ============ !!! Секретный токен !!! ===============
-APP_TOKEN = ""
+APP_TOKEN = APP_TOKEN_FROM_FILE
 # ====================================================
 PATH_TO_TODO_TABLE = "todo_result/todo_list.csv"
 
