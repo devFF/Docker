@@ -207,6 +207,65 @@ CREATE DATABASE todo_list;
 CREATE TABLE todo_list;
 ```
 
+Добавим в нее таблицу todo_list (id, text, status). Добавим элемент таблицы и выведем его значение. 
 
+## Теперь поработаем с superset и postgres:
 
+### 1. Поднимем Postgres
+```bash
+docker run -d --rm -e POSTGRES_PASSWORD=admin -e POSTGRES_USER=admin -e POSTGRES_DB=todo_db -p 5432:5432 postgres:14
+```
 
+### 2. Поднимем superset
+```bash
+docker run -d -p 8080:8088 -e "SUPERSET_SECRET_KEY=My_Super_Secret_Password" --name superset apache/superset
+```
+Настроим аккаунт админа:
+```bash
+
+docker exec -it superset superset fab create-admin --username admin --firstname Superset --lastname Admin --email admin@superset.com --password admin
+```
+
+Migrate local DB to latest
+```bash
+docker exec -it superset superset db upgrade
+```
+
+Setup roles
+```bash
+docker exec -it superset superset init
+```
+
+Далее, нажем плюсик - Data - Connect database - Postgresql.
+HOST: 127.0.0.1 - не выйдет (или 172.17.0.1 или 127.0.0.2 и т.д.)
+PORT: 5432
+DATABASE NAME: todo_db
+USERNAME: admin
+PASSWORD: admin
+
+Обязательно отмечаем галочками следующие пункты:
+- Expose database in SQL Lab
+- Allow CREATE TABLE AS
+- Allow CREATE VIEW AS
+- Allow DML
+
+Далее перейдем в SQL Lab. Выберем SCHEMA Public. Создадим таблицу:
+```SQL
+CREATE TABLE todo_list (
+  id TEXT NOT NULL,
+  text TEXT NOT NULL,
+  status TEXT NOT NULL
+);
+```
+Добавим данные, выберем таблицу и выведем данные:
+```SQL
+INSERT INTO todo_list (id, text, status) VALUES ('1', 'Купить масло', 'active');
+SELECT * FROM todo_list
+```
+
+## Телеграм бот и база данных
+Изменим бота так, чтобы он сохранял данные не в файлик, а в БД яндекс клик хаус.
+
+Через ddl.py (DDL - Data Definition Language) создаем БД и таблицу в ней. А в tg_bot.py уже работаем с этой таблицей (DML). Читаем и записываем.
+
+Если бота поднимаем локально, то проблем нет. Теперь завернем его в контейнер. Теперь бот не работает, не может подключиться к БД.
