@@ -10,20 +10,26 @@ docker run --rm -d \
 ```
 
 ## Создаем таблицу Postgres
+У Postgres есть своя консоль для управления БД - psql.
 ``` bash
 docker exec -it database psql --username docker_app --dbname docker_app_db
 ```
 Внутри контейнера с postgres создаем таблицу:
+Можно вводить построчно, так как инструкция закрывается через ```;```
 ```SQL
-CREATE TABLE app_table
-(
+CREATE TABLE app_table (
     id     text NOT NULL,
     text   text NOT NULL,
     status text NOT NULL
 );
 ```
+Проверим нашу таблицу:
+```SQL
+SELECT * FROM app_table
+```
 
 ## Поднимаем backend
+Через переменную окружения укажем имя контейнера с БД
 ``` bash
 docker run --rm -d \
   --name backend \
