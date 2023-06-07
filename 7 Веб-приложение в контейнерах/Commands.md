@@ -45,7 +45,7 @@ docker run --rm -d \
 ```
 
 ## Поднимаем бекенд
-
+Важно, чтобы имя совпадало с доменом в nginx.conf!
 ```shell
 docker run --rm -d \
   --name backend \
@@ -59,7 +59,7 @@ docker run --rm -d \
 ```
 
 ## Поднимаем фронтедн
-
+А вот здесь мы уже прокидываем BIND MOUNT из рабочей директории /nginx/nginx.conf и помещаем в нужном пути контейнера с nginx с рид онли режимом.
 ```shell
 docker run --rm -d \
   --name frontend \
