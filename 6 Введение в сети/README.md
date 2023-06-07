@@ -95,7 +95,7 @@ ping 66.108.82.23
 ```bash
 docker run --rm -it custom_ubuntu
 ```
-![pic2](pic2.PNG)
+![pic2](pic2.png)
 
 
 Рассмотрим интерфейсы:
@@ -142,7 +142,7 @@ curl back:8000/test
 ## Бекенд и база данных
 Выполняем команды из Commands.md.
 Все работает, вот что получилось:
-![pic3](pic3.PNG)
+![pic3](pic3.png)
 
 ## Из заданий
 Можно поднять контейнер и указать ему ip и port:
@@ -173,7 +173,7 @@ PG_DATABASE — база данных, которая задается при п
 
 Поднимем БД
 ```bash
-run --rm -d --name database --net=net -p 5432:5432 -e POSTGRES_USER=docker_app -e POSTGRES_PASSWORD=docker_app -e POSTGRES_DB=docker_app_db postgres:14
+docker run --rm -d --name database --net=net -p 5432:5432 -e POSTGRES_USER=docker_app -e POSTGRES_PASSWORD=docker_app -e POSTGRES_DB=docker_app_db postgres:14
 ```
 
 У приложения укажем переменные окружения при запуске:
