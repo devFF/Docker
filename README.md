@@ -76,3 +76,9 @@
 - Multi-stage build
 - Сборка фронтенда
 - Веб-приложение в контейнерах
+
+### 8. YAML и docker-compose
+- YAML
+- docker-compose
+- Разворачиваем Airflow
+- Команды
