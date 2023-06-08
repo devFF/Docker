@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  db:
+    image: 7_database
+    container_name: database
+    environment:
+      POSTGRES_DB: docker_app_db
+      POSTGRES_USER: docker_app
+      POSTGRES_PASSWORD: docker_app
+    volumes:
+      - todo_db:/var/lib/postgresql/database
+    networks:
+      - todo_net
+    restart: always # Если по каким-то причинам БД падает - поднимаем ее
+    # А теперь сделаем проверку, готова ли БД к работе - и теперь в статусе увидим статус (healthy)
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isreade", "-U", "docker_app"] # pg_isready - команада postgres, CMD-SHELL - терминал
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+  backend:
+    image: 7_back
+    container_name: backend
+    environment:
+      HOST: database
+      PORT: 5432
+      DB: docker_app_db 
+      DB_USERNAME: docker_app 
+      DB_PASSWORD: docker_app 
+    networks:
+      - todo_net
+    # Добавим проверку, если наша тестовая ручка сработает, то бекенд работает
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "localhost:8000/test"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    # Добавим условие, что бекенд поднимется, когда БД успешно пройдет проверку
+    depends_on:
+      db:
+        condition: service_healthy 
+    
+
+  nginx:
+    image: 7_nginx
+    container_name: frontend
+    ports:
+      - 80:80
+    networks:
+      - todo_net
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro # ./nginx.conf - так как этот файл у нас лежит рядом с docker-compose
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+
+networks:
+    todo_net:
+      name: todo_net
