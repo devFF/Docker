@@ -1,0 +1,13 @@
+# шаблон
+junior:
+    &junior
+    position: junior
+    salary: 55000
+
+# Вызываем этот шаблон:
+team:
+    backend:
+        - Peter:
+            <<: *junior
+        - Olga:
+            <<: *junior
