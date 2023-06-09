@@ -82,3 +82,14 @@
 - docker-compose
 - Разворачиваем Airflow
 - Команды
+
+### 9. Веб-приложение в docker-compose
+- Инструкции docker-compose
+- Веб-приложение в docker-compose
+- Расширяем docker-compose файл
+- Сокращаем docker-compose файл
+
+### 10. За пределами контейнеров
+- Ansible
+- CI/CD
+- Kubernetes

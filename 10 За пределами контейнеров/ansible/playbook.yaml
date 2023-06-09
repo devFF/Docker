@@ -1,0 +1,17 @@
+- name: Deploy frontend
+  hosts: "production" # секция
+  remote_user: "anton"
+  tasks:
+    - name: Send config file
+      ansible.builtin.copy:
+        src: ./nginx.conf
+        dest: /home/anton/10.Ansible
+
+    - name: Deploy container
+      docker_container:
+        name: "nginx"
+        image: "kcoursedocker/frontend-demo:v1"
+        ports:
+          - "80:80"
+        volumes:
+          - /home/anton/10.Ansible/nginx.conf:/etc/nginx/nginx.conf:ro

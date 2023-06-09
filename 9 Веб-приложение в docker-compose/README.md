@@ -54,4 +54,3 @@ deploy:
 ```bash
 docker-compose up -d
 ```
-# Инструкции
