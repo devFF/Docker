@@ -1,5 +1,7 @@
 # Docker
-Конспекты из курса Docker с нуля от karpov.courses
+Конспекты из курса Docker с нуля от karpov.courses.
+
+[Ссылка на сертификат](https://lab.karpov.courses/live_certificate/27985ea6-cd20-4993-a9d3-e8d4578a9dd0/)
 ## Содержание уроков:
 
 ### 1. Установка Docker
