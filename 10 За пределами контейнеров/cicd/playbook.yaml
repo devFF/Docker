@@ -1,0 +1,12 @@
+- name: Deploy backend
+  hsots: "all"
+  remote_user: "anton"
+  vars: 
+    ansible_ssh_private_key_file: "/home/gitlab-runner/.ssh/id_rsa"
+  tasks: 
+    - name: Deploy container
+      docker container:
+        name: "backend"
+        image: kcoursedocker/backend-demo:v1
+        ports:
+          - "80:8000"

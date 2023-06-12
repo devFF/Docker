@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+    name: nginx-deployment
+    labels:
+        app: frontend
+spec:
+    replicas: 4
+    strategy: 
+    type: RollingUpdate
+    rollingUpdate: 
+    maxSurge: 50%
+    maxUnavailable: 50%
+selector: 
+    matchLabels: 
+        app: frontend
+template: 
+    metadata:
+        labels:
+            app: frontend
+    spec:
+        containers:
+            - name: nginx
+              image: kcoursedocker/backend-demo:v1

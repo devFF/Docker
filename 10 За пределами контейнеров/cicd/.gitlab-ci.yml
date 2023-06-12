@@ -1,0 +1,62 @@
+stages:
+    - style
+    - test
+    - build
+    - push
+    - deploy
+
+style-test: # этап с статическим тестированием, прогоняем наш код на некоторые линтеры
+    stage: style
+    tags:
+        - container
+    before_script:
+        - pip install -r requirements.txt
+    script:
+        - isort --check --diff src/*  # смотрит, чтобы не было неиспользуемых импортов и т.д.
+        - flake8 src/* # смотрим насколько наш код соответствует PEP8
+    only:  # эти тесты запускаем и на merge_requests, и на master
+        - merge_requests
+        - master
+
+test: # тест функциональной части кода
+    stage: test
+    tags:
+        - container
+    before_script:
+        - pip install -r requirements.test.txt
+    script:
+        - pytest src/test.py
+    only: 
+        - merge_requests
+        - master
+
+build: # Собираем образ
+    stage: build
+    tags:
+        - demo
+        - docker
+    script:
+        - sudo docker build -t kcoursedocker/backend-demo:v1 .
+    only: 
+        - master
+
+push: # пушим его в репозиторий
+    stage: push
+    tags:
+        - demo
+        - docker
+    script:
+        - sudo docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - sudo docker push kcoursedocker/backend-demo:v1
+    only: 
+        - master
+
+deploy:
+    stage: deploy
+    tags:
+        - demo
+        - docker
+    script: 
+        - sudo ansible-playbook -i inventory playbook.yaml
+    only:
+        master
